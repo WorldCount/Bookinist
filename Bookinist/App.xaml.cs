@@ -1,44 +1,48 @@
 ﻿using Bookinist.Services;
-using Bookinist.ViewModels;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Linq;
 using System.Windows;
+using Bookinist.ViewModels;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Bookinist
 {
     public partial class App
     {
-        public static Window ActivedWindow => Current.Windows.Cast<Window>().FirstOrDefault(w => w.IsActive);
+        private static IHost _host;
+
+        #region Свойства
 
         public static Window FocusedWindow => Current.Windows.Cast<Window>().FirstOrDefault(w => w.IsFocused);
 
-        private static IHost _host;
+        public static Window ActiveWindow => Current.Windows.Cast<Window>().FirstOrDefault(w => w.IsActive);
 
-        public static IHost Host => _host ??= Microsoft.Extensions.Hosting.Host
-            .CreateDefaultBuilder(Environment.GetCommandLineArgs())
-            .ConfigureAppConfiguration(cfg => cfg.AddJsonFile("app_settings.json", true, true))
-            .ConfigureServices((host, services) => services
-                .AddViews()
-                .AddServices()
-            )
-            .Build();
+        public static IHost Host => _host
+            ??= Program.CreateHostBuilder(Environment.GetCommandLineArgs()).Build();
 
         public static IServiceProvider Services => Host.Services;
+
+        public static void ConfigureServices(HostBuilderContext host, IServiceCollection services) => services
+            .AddServices()
+            .AddViewModels();
+
+        #endregion
 
         protected override async void OnStartup(StartupEventArgs e)
         {
             var host = Host;
+
             base.OnStartup(e);
-            await host.StartAsync();
+
+            await host.StartAsync().ConfigureAwait(false);
         }
 
         protected override async void OnExit(ExitEventArgs e)
         {
             base.OnExit(e);
-            using var host = Host;
-            await host.StopAsync();
+
+            using (Host) await Host.StopAsync().ConfigureAwait(false);
         }
     }
 }
