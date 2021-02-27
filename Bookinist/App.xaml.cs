@@ -35,8 +35,12 @@ namespace Bookinist
         {
             var host = Host;
 
-            base.OnStartup(e);
+            using (var scope = Services.CreateScope())
+            {
+                scope.ServiceProvider.GetRequiredService<DbInitializer>().InitializeAsync().Wait();
+            }
 
+            base.OnStartup(e);
             await host.StartAsync().ConfigureAwait(false);
         }
 
