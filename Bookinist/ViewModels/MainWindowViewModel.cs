@@ -1,5 +1,8 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using System.Windows.Input;
 using Bookinist.DB.Entityes;
+using Bookinist.Infrastructure.Commands;
 using Bookinist.Interfaces;
 using Bookinist.Services.Interfaces;
 using Bookinist.ViewModels.Base;
@@ -8,11 +11,18 @@ namespace Bookinist.ViewModels
 {
     internal class MainWindowViewModel : ViewModel
     {
+        #region Приватные поля
+
         private readonly IUserDialog _userDialog;
+        private readonly ISalesService _salesService;
+
         private readonly IRepository<Book> _bookRepository;
         private readonly IRepository<Seller> _sellerRepository;
         private readonly IRepository<Buyer> _buyerRepository;
-        private readonly ISalesService _salesService;
+
+        #endregion
+
+        #region Свойства
 
         #region Title : string - Заголовок окна
 
@@ -42,6 +52,78 @@ namespace Bookinist.ViewModels
 
         #endregion
 
+        #region CurrentModel : ViewModel - Текущая дочерная модель-представления
+
+        /// <summary>Текущая дочерная модель-представления</summary>
+        private ViewModel _currentModel;
+
+        /// <summary>Текущая дочерная модель-представления</summary>
+        public ViewModel CurrentModel
+        {
+            get => _currentModel;
+            set => Set(ref _currentModel, value);
+        }
+
+        #endregion
+
+        #endregion
+
+        #region Команды
+
+        #region Отобразить представление книг
+
+        private ICommand _showBooksViewCommand;
+
+        /// <summary>Отобразить представление книг</summary>
+        public ICommand ShowBooksViewCommand => _showBooksViewCommand ??= new LambdaCommand(OnShowBooksViewCommandExecuted, CanShowBooksViewCommandExecute);
+
+        private bool CanShowBooksViewCommandExecute(object p) => true;
+
+        private void OnShowBooksViewCommandExecuted(object p)
+        {
+            CurrentModel = new BooksViewModel(_bookRepository);
+        }
+
+        #endregion
+
+        #region Отобразить представление покупателей
+
+        private ICommand _showBuyersViewCommand;
+
+        /// <summary>Отобразить представление покупателей</summary>
+        public ICommand ShowBuyersViewCommand => _showBuyersViewCommand ??= new LambdaCommand(OnShowBuyersViewCommandExecuted, CanShowBuyersViewCommandExecute);
+
+        private bool CanShowBuyersViewCommandExecute(object p) => true;
+
+        private void OnShowBuyersViewCommandExecuted(object p)
+        {
+            CurrentModel = new BuyersViewModel(_buyerRepository);
+        }
+
+        #endregion
+
+        #region Отобразить представление статистики
+
+        private ICommand _showStatisticsViewCommand;
+
+        /// <summary>Отобразить представление статистики</summary>
+        public ICommand ShowStatisticsViewCommand => _showStatisticsViewCommand ??= new LambdaCommand(OnShowStatisticsViewCommandExecuted, CanShowStatisticsViewCommandExecute);
+
+        private bool CanShowStatisticsViewCommandExecute(object p) => true;
+
+        private void OnShowStatisticsViewCommandExecuted(object p)
+        {
+            CurrentModel = new StatisticsViewModel(
+                _bookRepository, _buyerRepository, _sellerRepository
+                );
+        }
+
+        #endregion
+
+        #endregion
+
+
+
         public MainWindowViewModel(
             IUserDialog userDialog, 
             IRepository<Book> bookRepository,
@@ -56,8 +138,6 @@ namespace Bookinist.ViewModels
             _salesService = salesService;
 
             Test();
-
-            
         }
 
         private async void Test()
