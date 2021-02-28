@@ -9,8 +9,10 @@ namespace Bookinist.ViewModels
     internal class MainWindowViewModel : ViewModel
     {
         private readonly IUserDialog _userDialog;
-        private readonly IDataService _dataService;
         private readonly IRepository<Book> _bookRepository;
+        private readonly IRepository<Seller> _sellerRepository;
+        private readonly IRepository<Buyer> _buyerRepository;
+        private readonly ISalesService _salesService;
 
         #region Title : string - Заголовок окна
 
@@ -40,13 +42,35 @@ namespace Bookinist.ViewModels
 
         #endregion
 
-        public MainWindowViewModel(IUserDialog userDialog, IDataService dataService, IRepository<Book> bookRepository)
+        public MainWindowViewModel(
+            IUserDialog userDialog, 
+            IRepository<Book> bookRepository,
+            IRepository<Seller> sellerRepository, 
+            IRepository<Buyer> buyerRepository, 
+            ISalesService salesService)
         {
             _userDialog = userDialog;
-            _dataService = dataService;
             _bookRepository = bookRepository;
+            _sellerRepository = sellerRepository;
+            _buyerRepository = buyerRepository;
+            _salesService = salesService;
 
-            var books = _bookRepository.Items.Take(10).ToArray();
+            Test();
+
+            
+        }
+
+        private async void Test()
+        {
+            var dealsCount = _salesService.Deals.Count();
+
+            var book = _bookRepository.Get(5);
+            var buyer = _buyerRepository.Get(3);
+            var seller = _sellerRepository.Get(7);
+
+            var deal = await _salesService.MakeADealAsync(book.Name, seller, buyer, 100m).ConfigureAwait(false);
+
+            var dealsCount2 = _salesService.Deals.Count();
         }
     }
 }
