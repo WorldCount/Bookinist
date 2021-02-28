@@ -1,6 +1,6 @@
 ﻿using Bookinist.DB.Entityes;
 using Bookinist.Interfaces;
-using Bookinist.ViewModels.Base;
+using MathCore.WPF.ViewModels;
 
 namespace Bookinist.ViewModels
 {

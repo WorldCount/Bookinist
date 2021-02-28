@@ -1,11 +1,11 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Windows.Input;
 using Bookinist.DB.Entityes;
 using Bookinist.Infrastructure.Commands;
 using Bookinist.Interfaces;
 using Bookinist.Services.Interfaces;
-using Bookinist.ViewModels.Base;
+using MathCore.WPF.ViewModels;
+
 
 namespace Bookinist.ViewModels
 {

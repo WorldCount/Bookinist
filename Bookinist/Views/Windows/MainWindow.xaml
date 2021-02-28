@@ -18,9 +18,9 @@
                 <MenuItem Header="Выход" Command="{StaticResource CloseWindowCommand}"/>
             </MenuItem>
 
-            <MenuItem Header="Покупатели"/>
-            <MenuItem Header="Книги"/>
-            <MenuItem Header="Статистика"/>
+            <MenuItem Header="Покупатели" Command="{Binding ShowBuyersViewCommand}"/>
+            <MenuItem Header="Книги" Command="{Binding ShowBooksViewCommand}"/>
+            <MenuItem Header="Статистика" Command="{Binding ShowStatisticsViewCommand}"/>
 
         </Menu>
 
@@ -32,7 +32,10 @@
         </StatusBar>
 
         <Grid>
-
+            <Grid.Resources>
+                <ResourceDictionary Source="../../Resources/Templates/ModelMainView.xaml"/>
+            </Grid.Resources>
+            <ContentControl Content="{Binding CurrentModel}"/>
         </Grid>
 
     </DockPanel>
