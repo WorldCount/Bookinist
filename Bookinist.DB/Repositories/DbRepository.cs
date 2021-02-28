@@ -7,9 +7,9 @@ using Bookinist.DB.Entityes.Base;
 using Bookinist.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace Bookinist.DB
+namespace Bookinist.DB.Repositories
 {
-    public class DbRepository<T> : IRepository<T> where T : Entity, new()
+    internal class DbRepository<T> : IRepository<T> where T : Entity, new()
     {
         private readonly BookinistDb _db;
         private readonly DbSet<T> _set;
@@ -78,12 +78,6 @@ namespace Bookinist.DB
 
         public void Remove(int id)
         {
-            //var item = Get(id);
-
-            //if(item is null) return;
-
-            //_db.Entry(item).State = EntityState.Deleted;
-
             _db.Remove(new T {Id = id});
 
             if (AutoSaveChanges)

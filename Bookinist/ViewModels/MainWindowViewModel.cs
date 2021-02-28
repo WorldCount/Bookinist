@@ -1,4 +1,7 @@
-﻿using Bookinist.Services.Interfaces;
+﻿using System.Linq;
+using Bookinist.DB.Entityes;
+using Bookinist.Interfaces;
+using Bookinist.Services.Interfaces;
 using Bookinist.ViewModels.Base;
 
 namespace Bookinist.ViewModels
@@ -7,6 +10,7 @@ namespace Bookinist.ViewModels
     {
         private readonly IUserDialog _userDialog;
         private readonly IDataService _dataService;
+        private readonly IRepository<Book> _bookRepository;
 
         #region Title : string - Заголовок окна
 
@@ -36,10 +40,13 @@ namespace Bookinist.ViewModels
 
         #endregion
 
-        public MainWindowViewModel(IUserDialog userDialog, IDataService dataService)
+        public MainWindowViewModel(IUserDialog userDialog, IDataService dataService, IRepository<Book> bookRepository)
         {
             _userDialog = userDialog;
             _dataService = dataService;
+            _bookRepository = bookRepository;
+
+            var books = _bookRepository.Items.Take(10).ToArray();
         }
     }
 }
