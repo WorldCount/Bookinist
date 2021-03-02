@@ -4,9 +4,27 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Bookinist.Views"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             DataContext="{Binding StatisticsModel, Source={StaticResource Locator}}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding ComputeStatisticCommand}"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+
     <Grid>
-        <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="30" Text="Статистика"/>
+        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+            <TextBlock  FontSize="30" FontWeight="Bold" Text="Статистика"/>
+            <TextBlock HorizontalAlignment="Center" Margin="0, 10">
+                Число книг <TextBlock Text="{Binding BooksCount}"/> шт.
+            </TextBlock>
+            <TextBlock HorizontalAlignment="Center" Margin="0, 10">
+                Число книг <Run Text="{Binding BooksCount}" 
+                                Foreground="{StaticResource RedBrush}"/> шт.
+            </TextBlock>
+        </StackPanel>
     </Grid>
 </UserControl>

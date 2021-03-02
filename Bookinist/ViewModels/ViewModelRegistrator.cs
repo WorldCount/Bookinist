@@ -6,6 +6,9 @@ namespace Bookinist.ViewModels
     {
         public static IServiceCollection AddViewModels(this IServiceCollection services) => services
             .AddSingleton<MainWindowViewModel>()
+            .AddTransient<StatisticsViewModel>()
+            .AddTransient<BooksViewModel>()
+            .AddTransient<BuyersViewModel>()
         ;
     }
 }

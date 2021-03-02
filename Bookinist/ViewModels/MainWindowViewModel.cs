@@ -19,6 +19,7 @@ namespace Bookinist.ViewModels
         private readonly IRepository<Book> _bookRepository;
         private readonly IRepository<Seller> _sellerRepository;
         private readonly IRepository<Buyer> _buyerRepository;
+        private readonly IRepository<Deal> _dealRepository;
 
         #endregion
 
@@ -114,7 +115,7 @@ namespace Bookinist.ViewModels
         private void OnShowStatisticsViewCommandExecuted(object p)
         {
             CurrentModel = new StatisticsViewModel(
-                _bookRepository, _buyerRepository, _sellerRepository
+                _bookRepository, _buyerRepository, _sellerRepository, _dealRepository
                 );
         }
 
@@ -129,15 +130,17 @@ namespace Bookinist.ViewModels
             IRepository<Book> bookRepository,
             IRepository<Seller> sellerRepository, 
             IRepository<Buyer> buyerRepository, 
+            IRepository<Deal> dealRepository,
             ISalesService salesService)
         {
             _userDialog = userDialog;
             _bookRepository = bookRepository;
             _sellerRepository = sellerRepository;
             _buyerRepository = buyerRepository;
+            _dealRepository = dealRepository;
             _salesService = salesService;
 
-            Test();
+            // Test();
         }
 
         private async void Test()

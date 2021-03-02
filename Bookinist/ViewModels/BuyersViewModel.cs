@@ -2,6 +2,7 @@
 using Bookinist.Interfaces;
 using MathCore.WPF.ViewModels;
 
+
 namespace Bookinist.ViewModels
 {
     class BuyersViewModel : ViewModel
