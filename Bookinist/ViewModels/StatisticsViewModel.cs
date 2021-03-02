@@ -20,21 +20,7 @@ namespace Bookinist.ViewModels
 
         #region Свойства
 
-        #region BooksCount : int - Количество книг
-
-        /// <summary>Количество книг</summary>
-        private int _booksCount;
-
-        /// <summary>Количество книг</summary>
-        public int BooksCount
-        {
-            get => _booksCount;
-            set => Set(ref _booksCount, value);
-        }
-
-        #endregion
-
-        public ObservableCollection<BestSellerInfo> BestSellers = new ObservableCollection<BestSellerInfo>();
+        public ObservableCollection<BestSellerInfo> BestSellers { get; } = new ObservableCollection<BestSellerInfo>();
 
         #endregion
 
@@ -49,8 +35,6 @@ namespace Bookinist.ViewModels
 
         private async Task OnComputeStatisticCommandExecuted(object p)
         {
-            BooksCount = await _bookRepository.Items.CountAsync();
-
             await ComputedDealsStatisticAsync();
         }
 
