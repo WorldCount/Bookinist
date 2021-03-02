@@ -6,6 +6,7 @@
         xmlns:l="clr-namespace:Bookinist"
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         DataContext="{Binding MainWindowModel, Source={StaticResource Locator}}"
+        WindowStartupLocation="CenterScreen"
         Title="{Binding Title}" Height="450" Width="800">
 
     <i:Interaction.Triggers>

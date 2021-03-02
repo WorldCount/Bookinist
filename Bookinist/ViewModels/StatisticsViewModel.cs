@@ -1,9 +1,11 @@
-﻿using System.Linq;
+﻿using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Bookinist.DB.Entityes;
 using Bookinist.Infrastructure.Commands;
 using Bookinist.Interfaces;
+using Bookinist.Models;
 using MathCore.WPF.ViewModels;
 using Microsoft.EntityFrameworkCore;
 
@@ -32,6 +34,8 @@ namespace Bookinist.ViewModels
 
         #endregion
 
+        public ObservableCollection<BestSellerInfo> BestSellers = new ObservableCollection<BestSellerInfo>();
+
         #endregion
 
         #region Команды
@@ -41,24 +45,34 @@ namespace Bookinist.ViewModels
         private ICommand _computeStatisticCommand;
 
         /// <summary>Вычислить статистические данные</summary>
-        public ICommand ComputeStatisticCommand => _computeStatisticCommand ??= new LambdaCommandAsync(OnComputeStatisticCommandExecuted, CanComputeStatisticCommandExecute);
-
-        private bool CanComputeStatisticCommandExecute(object p) => true;
+        public ICommand ComputeStatisticCommand => _computeStatisticCommand ??= new LambdaCommandAsync(OnComputeStatisticCommandExecuted);
 
         private async Task OnComputeStatisticCommandExecuted(object p)
         {
             BooksCount = await _bookRepository.Items.CountAsync();
 
-            var deals = _dealRepository.Items.Include(i => i.Book);
-            var bestSeller = await deals.GroupBy(deal => deal.Book)
-                .Select(bookDeals => new
+            await ComputedDealsStatisticAsync();
+        }
+
+        private async Task ComputedDealsStatisticAsync()
+        {
+            var bestSellerQuery = _dealRepository.Items
+                .GroupBy(b => b.Book.Id)
+                .Select(deals => new
                 {
-                    Book = bookDeals.Key, 
-                    Count = bookDeals.Count()
+                    BookId = deals.Key,
+                    Count = deals.Count()
                 })
-                .OrderByDescending(book => book.Count)
+                .OrderByDescending(deals => deals.Count)
                 .Take(5)
-                .ToArrayAsync();
+                .Join(_bookRepository.Items,
+                    deals => deals.BookId,
+                    book => book.Id,
+                    (deals, book) => new BestSellerInfo { Book = book, SellCount = deals.Count });
+
+            BestSellers.Clear();
+            foreach (var bestSellerInfo in await bestSellerQuery.ToArrayAsync())
+                BestSellers.Add(bestSellerInfo);
         }
 
         #endregion

@@ -19,11 +19,11 @@
         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
             <TextBlock  FontSize="30" FontWeight="Bold" Text="Статистика"/>
             <TextBlock HorizontalAlignment="Center" Margin="0, 10">
-                Число книг <TextBlock Text="{Binding BooksCount}"/> шт.
-            </TextBlock>
-            <TextBlock HorizontalAlignment="Center" Margin="0, 10">
-                Число книг <Run Text="{Binding BooksCount}" 
-                                Foreground="{StaticResource RedBrush}"/> шт.
+                Всего книг: <Run Text="{Binding BooksCount}" Foreground="{StaticResource RedBrush}">
+                    <Run.TextDecorations>
+                        <TextDecoration/>
+                    </Run.TextDecorations>
+                </Run>
             </TextBlock>
         </StackPanel>
     </Grid>
