@@ -15,6 +15,8 @@ namespace Bookinist
 
         #region Свойства
 
+        public static bool IsDisignTime { get; private set; } = true;
+
         public static Window FocusedWindow => Current.Windows.Cast<Window>().FirstOrDefault(w => w.IsFocused);
 
         public static Window ActiveWindow => Current.Windows.Cast<Window>().FirstOrDefault(w => w.IsActive);
@@ -33,6 +35,8 @@ namespace Bookinist
 
         protected override async void OnStartup(StartupEventArgs e)
         {
+            IsDisignTime = false;
+
             var host = Host;
 
             using (var scope = Services.CreateScope())

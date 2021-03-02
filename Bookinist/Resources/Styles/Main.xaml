@@ -1,6 +1,10 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    
+
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="../Base/Brushes.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
+
     <Style TargetType="Menu">
         <Style.Triggers>
             <Trigger Property="IsMainMenu" Value="True">
@@ -11,5 +15,17 @@
 
     <Style TargetType="StatusBar">
         <Setter Property="DockPanel.Dock" Value="Bottom"/>
+    </Style>
+
+    <Style TargetType="DataGrid">
+        <Setter Property="AutoGenerateColumns" Value="False"/>
+        <Setter Property="CanUserAddRows" Value="False"/>
+        <Setter Property="CanUserDeleteRows" Value="False"/>
+        <Setter Property="GridLinesVisibility" Value="Vertical"/>
+        <Setter Property="Background" Value="{StaticResource WhiteBrush}"/>
+        <Setter Property="VerticalGridLinesBrush" Value="{StaticResource GrayBrush}"/>
+        <Setter Property="AlternatingRowBackground" Value="LightPink"/>
+        <Setter Property="RowBackground" Value="{StaticResource WhiteBrush}"/>
+        <Setter Property="HeadersVisibility" Value="Column"/>
     </Style>
 </ResourceDictionary>

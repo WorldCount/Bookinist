@@ -20,10 +20,11 @@
         <TabControl>
             <TabItem Header="Книги">
                 <GroupBox Header="Бестселлеры">
-                    <DataGrid ItemsSource="{Binding BestSellers}" AutoGenerateColumns="False">
+                    <DataGrid ItemsSource="{Binding BestSellers}" IsReadOnly="True" AutoGenerateColumns="False">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Книга" Width="*" Binding="{Binding Book.Name}"/>
                             <DataGridTextColumn Header="Количество продаж" Binding="{Binding SellCount}"/>
+                            <DataGridTextColumn Header="Сумма продаж" Binding="{Binding CostSum, StringFormat=C}"/>
                         </DataGrid.Columns>
                     </DataGrid>
                 </GroupBox>

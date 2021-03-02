@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Bookinist.DB.Entityes;
 using Bookinist.Infrastructure.Commands;
+using Bookinist.Infrastructure.Extensions;
 using Bookinist.Interfaces;
 using Bookinist.Models;
 using MathCore.WPF.ViewModels;
@@ -45,18 +46,27 @@ namespace Bookinist.ViewModels
                 .Select(deals => new
                 {
                     BookId = deals.Key,
-                    Count = deals.Count()
+                    Count = deals.Count(),
+                    Sum = deals.Sum(d => d.Price)
                 })
                 .OrderByDescending(deals => deals.Count)
                 .Take(5)
                 .Join(_bookRepository.Items,
                     deals => deals.BookId,
                     book => book.Id,
-                    (deals, book) => new BestSellerInfo { Book = book, SellCount = deals.Count });
+                    (deals, book) => new BestSellerInfo
+                    {
+                        Book = book, 
+                        SellCount = deals.Count,
+                        CostSum = deals.Sum
+                    });
 
-            BestSellers.Clear();
-            foreach (var bestSellerInfo in await bestSellerQuery.ToArrayAsync())
-                BestSellers.Add(bestSellerInfo);
+            //BestSellers.Clear();
+
+            BestSellers.AddClear(await bestSellerQuery.ToArrayAsync());
+
+            //foreach (var bestSellerInfo in await bestSellerQuery.ToArrayAsync())
+            //    BestSellers.Add(bestSellerInfo);
         }
 
         #endregion
